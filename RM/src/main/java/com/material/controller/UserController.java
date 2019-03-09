@@ -107,7 +107,16 @@ public class UserController {
 		}
 		
 		
-		
+		//Delete(Inactive) User Data
+		@PostMapping("/deleteUser")
+		public ResponseEntity<?> deleteUserData(@RequestBody User user){
+			if(userServiceImpl.deleteUser(user.getUser_id()) > 0) {
+				return new ResponseEntity<Object>(new CustomException(Constant.SUCCESS,Constant.USER_DELETE_SUCCESS), HttpStatus.OK);
+			}
+			else {
+				return new ResponseEntity<Object>(new CustomException(Constant.FAIL,Constant.USER_DELETE_FAIL), HttpStatus.OK);
+			}
+		}
 	
 	
 }

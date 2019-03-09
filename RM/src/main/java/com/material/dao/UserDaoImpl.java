@@ -33,6 +33,8 @@ public class UserDaoImpl implements UserDaoI{
 	private static final String UPDATE_USER ="UPDATE user SET user_first_name=?,user_last_name=?,user_mobile=? where user_id=? AND user_status='1'";
 	//Get User Details by ID
 	private static final String GET_USER_BY_ID= "SELECT * from user where user_id=? AND user_status='1'";
+	//Delete User Data(Change status only)
+	private static final String DELETE_USER="UPDATE user SET user_status=? where user_id=?";
 	
 	@Override
 	public int addUser(User u)  {
@@ -103,6 +105,11 @@ public class UserDaoImpl implements UserDaoI{
 				return user;
 			}
 		},user_id);
+	}
+
+	@Override
+	public int deleteUser(int user_id) {
+		return template.update(DELETE_USER,0,user_id);
 	}
 
 	

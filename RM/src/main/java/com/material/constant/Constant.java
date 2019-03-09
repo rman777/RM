@@ -24,6 +24,8 @@ public class Constant {
 	public static final String USER_ALREADY_EXIST="User Already Exists";
 	public static final String USER_UPDATED_SUCCESS="User Data Updated Successfully";
 	public static final String USER_UPDATED_FAIL="Failed to Update User Data";
+	public static final String USER_DELETE_SUCCESS="User Deleted Successfully";
+	public static final String USER_DELETE_FAIL="Failed to Delete User Data";
 	/*------------------------------USER MESSAGES END------------------------------*/
 	
 	
