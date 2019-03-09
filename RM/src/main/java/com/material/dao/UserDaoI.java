@@ -3,6 +3,7 @@ package com.material.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.material.model.ExcelData;
 import com.material.model.User;
 
 public interface UserDaoI {
@@ -15,6 +16,7 @@ public interface UserDaoI {
 	public int updateUserData(User user);
 	public List<User> getUserDetails(int user_id);
 	public int deleteUser(int user_id);
+	 public int addExcelData(ExcelData excelData);
 
 	
 }

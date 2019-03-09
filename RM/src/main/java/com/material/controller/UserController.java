@@ -1,8 +1,12 @@
 package com.material.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +16,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 
 import com.material.constant.Constant;
 import com.material.exception.CustomException;
+import com.material.model.ExcelData;
 import com.material.model.User;
 import com.material.service.UserServiceImpl;
 
@@ -116,6 +125,26 @@ public class UserController {
 			else {
 				return new ResponseEntity<Object>(new CustomException(Constant.FAIL,Constant.USER_DELETE_FAIL), HttpStatus.OK);
 			}
+		}
+		
+		
+		// Upload Excel File
+		@RequestMapping(value="/import",method=RequestMethod.POST)
+		public ResponseEntity<?> mapReapExcelDatatoDB(@RequestParam("file") MultipartFile excelFile) throws IOException {
+		    XSSFWorkbook workbook = new XSSFWorkbook(excelFile.getInputStream());
+		    XSSFSheet worksheet = workbook.getSheetAt(0);
+		    for(int i=0;i<worksheet.getPhysicalNumberOfRows() ;i++) {
+		    	ExcelData exceldata = new ExcelData();
+		        XSSFRow row = worksheet.getRow(i);
+		        if(row.getCell(0) != null && row.getCell(1) != null) {
+		        	exceldata.setPart_name((row.getCell(0).getStringCellValue().isEmpty())?"-":row.getCell(0).getStringCellValue());
+		        	exceldata.setPart_qty((int) row.getCell(1).getNumericCellValue());
+		        	//exceldata.setUser_id(user_id);
+		        	 userServiceImpl.addExcelData(exceldata);
+		        }		         
+		    }
+		    return new ResponseEntity<Object>(new CustomException("Excel Data Uploaded Successfully"), HttpStatus.OK);
+		    
 		}
 	
 	

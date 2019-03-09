@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.material.dao.UserDaoImpl;
+import com.material.model.ExcelData;
 import com.material.model.User;
 
 @Service
@@ -57,6 +58,12 @@ public class UserServiceImpl implements UserServiceI{
 	@Override
 	public int deleteUser(int user_id) {
 		return userDaoImpl.deleteUser(user_id);
+	}
+
+	@Override
+	public int addExcelData(ExcelData excelData) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	

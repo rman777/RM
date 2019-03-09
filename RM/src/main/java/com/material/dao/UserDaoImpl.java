@@ -1,15 +1,21 @@
 package com.material.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
+import com.material.model.ExcelData;
 import com.material.model.User;
 
 @Repository
@@ -22,7 +28,7 @@ public class UserDaoImpl implements UserDaoI{
 			+ "user_status,user_created,user_last_login,role_id,dept_id)values(?,?,?,?,?,?,?,?,?,?)";	
 	
 	//Check User already exists or not
-	private  static final String CHK_USER_EXISTS ="SELECT COUNT(*) FROM user WHERE user_email=? AND user_status='1'";
+	private  static final String CHK_USER_EXISTS ="SELECT COUNT(*) FROM user WHERE user_email=?";
 	//Check User Login
 	private  static final String CHK_LOGIN = "SELECT * from user where user_email=? AND user_status='1'";
 	//Get All User Data
@@ -36,13 +42,35 @@ public class UserDaoImpl implements UserDaoI{
 	//Delete User Data(Change status only)
 	private static final String DELETE_USER="UPDATE user SET user_status=? where user_id=?";
 	
+	
+
 	@Override
 	public int addUser(User u)  {
 		
-		int result = template.update(SAVE_USER,u.getUser_first_name(),u.getUser_last_name(),u.getUser_mobile(),u.getUser_email()
-				,u.getUser_password(),u.getUser_status(),u.getUser_created(),u.getUser_last_login(),u.getRole_id()
-				,u.getDept_id());
-		return result;
+//		int result = template.update(SAVE_USER,u.getUser_first_name(),u.getUser_last_name(),u.getUser_mobile(),u.getUser_email()
+//				,u.getUser_password(),u.getUser_status(),u.getUser_created(),u.getUser_last_login(),u.getRole_id()
+//				,u.getDept_id());
+//		return result;
+		
+		GeneratedKeyHolder holder = new GeneratedKeyHolder();
+		template.update(new PreparedStatementCreator() {
+		    public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+		        PreparedStatement st = con.prepareStatement(SAVE_USER, Statement.RETURN_GENERATED_KEYS);
+		        st.setString(1, u.getUser_first_name());
+		        st.setString(2, u.getUser_last_name());
+		        st.setLong(3,   u.getUser_mobile());
+		        st.setString(4, u.getUser_email());
+		        st.setString(5, u.getUser_password());
+		        st.setInt(6, u.getUser_status());
+		        st.setDate(7, u.getUser_created());
+		        st.setDate(8, u.getUser_last_login());
+		        st.setLong(9, u.getRole_id());
+		        st.setLong(10, u.getDept_id());
+		        return st;
+		    }
+		}, holder);
+		int insert_id = holder.getKey().intValue();
+		return insert_id;
 	}
 
 	@Override
@@ -110,6 +138,12 @@ public class UserDaoImpl implements UserDaoI{
 	@Override
 	public int deleteUser(int user_id) {
 		return template.update(DELETE_USER,0,user_id);
+	}
+
+	@Override
+	public int addExcelData(ExcelData excelData) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	
