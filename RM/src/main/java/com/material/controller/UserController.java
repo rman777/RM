@@ -3,6 +3,7 @@ package com.material.controller;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -13,12 +14,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.material.config.EmailConfig;
 import com.material.constant.Constant;
 import com.material.exception.CustomException;
 import com.material.model.ExcelData;
@@ -52,10 +51,15 @@ public class UserController {
 	
 		 MimeMessage message = sender.createMimeMessage();
 	        MimeMessageHelper helper = new MimeMessageHelper(message);
-
 	        try {
+	        	String token = UUID.randomUUID().toString();
+	        	System.out.println("Password Token--------------------------"+token); 
+	        	String body = "<html><head></head><body>"
+	        			+ "<p>Welcome to Krios</p>"
+	        			+ "<a href='http://localhost:8080/reset/"+token+"' style='color:blue;background-color:yellow;padding:10px;'>Click here to Change Password</a>"    			
+	        			+ "</body></html>";
 	            helper.setTo("ranjeetsatpute777@gmail.com");
-	            helper.setText("Greetings :)");
+	            helper.setText(body,true);
 	            helper.setSubject("Mail From Spring Boot");
 	        } catch (MessagingException e) {
 	            e.printStackTrace();
@@ -65,17 +69,9 @@ public class UserController {
 	        return "Mail Sent Success!";
 	}
 	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	@RequestMapping("/")
-	public String index() {
+	@RequestMapping("/reset/{token}")
+	public String index(@PathVariable String token) {
+		System.out.println("Rest Password token----------------------------"+token);
 		return "Welcome to Rest Api";
 	}	
 	
@@ -186,9 +182,6 @@ public class UserController {
 		
 		
 		
-		public String ChangeinGit() {
-		return "Hello";
-		}
 	
 	
 }
