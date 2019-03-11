@@ -45,7 +45,7 @@ public class Constant {
 	public static final String DEPT_SAVE_FAIL="Failed to Add Department Data";
 	
 	
-	public static final String CHANGE="Change for Git";
+	public static final String CHANGE="Change By Ranjeet";
 	
 	/*------------------------------DEPARTMENT MESSAGES END------------------------------*/
 	
