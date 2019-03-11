@@ -72,7 +72,7 @@ public class UserController {
 	@RequestMapping("/reset/{token}")
 	public String index(@PathVariable String token) {
 		System.out.println("Rest Password token----------------------------"+token);
-		return "Welcome to Rest Api";
+		return "Welcome to Rest Api "+token;
 	}	
 	
 	// Save Register User Data
