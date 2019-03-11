@@ -183,6 +183,12 @@ public class UserController {
 		    return new ResponseEntity<Object>(new CustomException("Excel Data Uploaded Successfully"), HttpStatus.OK);
 		    
 		}
+		
+		
+		
+		public String ChangeinGit() {
+		return "Hello";
+		}
 	
 	
 }
