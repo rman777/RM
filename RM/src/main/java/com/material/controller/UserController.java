@@ -46,6 +46,12 @@ public class UserController {
 	@Autowired
     private JavaMailSender sender;
 	
+	
+	@RequestMapping("/hello")
+	public String test() {
+		return "Test Hello";
+	}
+	
 	@PostMapping("/sendMail")
 	public String SendMail() {
 	
